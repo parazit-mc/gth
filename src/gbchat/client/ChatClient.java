@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import javafx.application.Platform;
-
 import gbchat.Command;
 
 public class ChatClient {

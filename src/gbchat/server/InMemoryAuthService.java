@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class InMemoryAuthService implements AuthService {
 
     private final List<UserData> users;
