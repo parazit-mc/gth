@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ListView?>
+
 <VBox fx:controller="gbchat.client.Controller" xmlns:fx="http://javafx.com/fxml" spacing="5">
     <HBox fx:id="loginBox" spacing="5" VBox.vgrow="ALWAYS">
         <TextField fx:id="loginField" promptText="Login"/>

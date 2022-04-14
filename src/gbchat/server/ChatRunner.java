@@ -5,6 +5,5 @@ public class ChatRunner {
         final ChatServer server = new ChatServer();
         server.run();
 
-
     }
 }

@@ -7,7 +7,6 @@ import java.util.List;
 public class InMemoryAuthService implements AuthService {
 
     private final List<UserData> users;
-
     public InMemoryAuthService() {
         users = new ArrayList<>();
         for (int i = 0; i < 5; i++) {

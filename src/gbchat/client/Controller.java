@@ -2,6 +2,7 @@ package gbchat.client;
 
 import java.util.Optional;
 
+
 import gbchat.Command;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

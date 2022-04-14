@@ -1,7 +1,5 @@
 package gbchat.server;
-
 import gbchat.Command;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
