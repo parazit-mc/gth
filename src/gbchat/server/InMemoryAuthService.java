@@ -89,8 +89,6 @@ public class InMemoryAuthService implements AuthService  {
        return null;
     }
 
-
-
     @Override
     public void run() {
         System.out.println("AuthService run");

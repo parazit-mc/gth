@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class DBRunner {
     public static void main(String[] args) throws SQLException {
         InMemoryAuthService in = new InMemoryAuthService();
-        in.getNickByLoginAndPassword("login0","pass0");
+//        in.getNickByLoginAndPassword("login0","pass0");
 
     }
 
