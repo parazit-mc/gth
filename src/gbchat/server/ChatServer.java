@@ -3,6 +3,7 @@ import gbchat.Command;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class ChatServer {
         this.clients = new HashMap<>();
     }
 
-    public void run() {
+    public void run() throws SQLException {
         try (ServerSocket serverSocket = new ServerSocket(8189);
              AuthService authService = new InMemoryAuthService()) {
             while (true) {
