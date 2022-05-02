@@ -1,6 +1,5 @@
 package gbchat.server;
 
-
 import java.sql.SQLException;
 
 public class ChatRunner {

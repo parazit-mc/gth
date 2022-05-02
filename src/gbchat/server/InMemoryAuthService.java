@@ -16,7 +16,7 @@ public class InMemoryAuthService implements AuthService  {
     }
 
     void createTable() throws SQLException {
-        this.connection();
+//        this.connection();
 
         statement.executeUpdate("CREATE TABLE IF NOT EXISTS users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -57,7 +57,7 @@ public class InMemoryAuthService implements AuthService  {
     public String getNickByLoginAndPassword(String login, String password)  {
 
         try{
-            this.connection();
+//            this.connection();
             preparedStatement = connection.prepareStatement("select * from users where login = ? AND password = ?");
             preparedStatement.setString(1,login);
             preparedStatement.setString(2,password);
@@ -68,7 +68,6 @@ public class InMemoryAuthService implements AuthService  {
                     return resultSet.getString("nick");
                 }
             }
-
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,15 +80,8 @@ public class InMemoryAuthService implements AuthService  {
             }
         }
 
-//        for (UserData user : users) {
-//            if (user.login.equals(login) && user.password.equals(password)) {
-//                return user.nick;
-//            }
-//        }
        return null;
     }
-
-
 
     @Override
     public void run() {

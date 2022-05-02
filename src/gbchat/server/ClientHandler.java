@@ -6,24 +6,26 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-
 public class ClientHandler {
     private final Socket socket;
     private final ChatServer server;
     private final DataInputStream in;
     private final DataOutputStream out;
-    private final AuthService authService;
+//    private final AuthService authService;
+    private DbAuthService DbAuthService;
 
     private String nick;
 
-    public ClientHandler(Socket socket, ChatServer server, AuthService authService) {
+    public ClientHandler(Socket socket, ChatServer server, AuthService authService, DbAuthService dbAuthService) {
+        this.DbAuthService = dbAuthService;
         try {
             this.nick = "";
             this.socket = socket;
             this.server = server;
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
-            this.authService = authService;
+//            this.authService = authService;
+            this.DbAuthService = this.DbAuthService;
 
             new Thread(() -> {
                 try {
@@ -76,7 +78,7 @@ public class ClientHandler {
                     if (command == Command.AUTH) {
                         final String login = params[0];
                         final String password = params[1];
-                        final String nick = authService.getNickByLoginAndPassword(login, password);
+                        final String nick = DbAuthService.getNickByLoginAndPassword(login, password);
                         if (nick != null) {
                             if (server.isNickBusy(nick)) {
                                 sendMessage(Command.ERROR, "Пользователь уже авторизован");
@@ -127,6 +129,7 @@ public class ClientHandler {
                         server.sendMessageToClient(this, params[0], params[1]);
                         continue;
                     }
+
                 }
                 server.broadcast(nick + ": " + msg);
             }
