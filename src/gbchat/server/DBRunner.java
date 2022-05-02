@@ -7,7 +7,7 @@ import java.sql.SQLException;
 //test database connection
 public class DBRunner {
     public static void main(String[] args) throws SQLException {
-        InMemoryAuthService in = new InMemoryAuthService();
+        DbAuthService in = new DbAuthService();
 //        in.getNickByLoginAndPassword("login0","pass0");
 
     }
