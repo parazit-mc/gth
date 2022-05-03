@@ -1,6 +1,10 @@
 package gbchat.server;
 
+import gbchat.client.MessageChatLogging;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 
 public class DbAuthService implements AuthService {
@@ -9,8 +13,8 @@ public class DbAuthService implements AuthService {
     private Statement statement;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
-
-    public DbAuthService() throws SQLException {
+    MessageChatLogging ml = new MessageChatLogging();
+    public DbAuthService() throws SQLException, IOException {
         this.connection();
     }
 
@@ -22,8 +26,9 @@ public class DbAuthService implements AuthService {
 
     }
 
-    void connection() throws SQLException {
+    void connection() throws SQLException, FileNotFoundException, UnsupportedEncodingException {
         connection = DriverManager.getConnection("jdbc:sqlite:javadb.db");
+        ml.addEvent("database connected");
         statement = connection.createStatement();
     }
 

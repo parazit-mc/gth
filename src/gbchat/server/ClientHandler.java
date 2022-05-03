@@ -1,6 +1,8 @@
 package gbchat.server;
 
 import gbchat.Command;
+import gbchat.client.MessageChatLogging;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,12 +13,11 @@ public class ClientHandler {
     private final ChatServer server;
     private final DataInputStream in;
     private final DataOutputStream out;
-//    private final AuthService authService;
     private DbAuthService DbAuthService;
-
+    MessageChatLogging ml = new MessageChatLogging();
     private String nick;
 
-    public ClientHandler(Socket socket, ChatServer server, AuthService authService, DbAuthService dbAuthService) {
+    public ClientHandler(Socket socket, ChatServer server, AuthService authService, DbAuthService dbAuthService) throws IOException {
         this.DbAuthService = dbAuthService;
         try {
             this.nick = "";
@@ -24,7 +25,6 @@ public class ClientHandler {
             this.server = server;
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
-//            this.authService = authService;
             this.DbAuthService = this.DbAuthService;
 
             new Thread(() -> {
@@ -91,6 +91,7 @@ public class ClientHandler {
                             break;
                         } else {
                             sendMessage(Command.ERROR, "Неверные логин и пароль");
+                            ml.addEvent("wrong login/password");
                         }
                     }
                 }
