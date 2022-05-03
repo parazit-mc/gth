@@ -3,24 +3,30 @@ import gbchat.Command;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ChatServer {
 
     private final Map<String, ClientHandler> clients;
+    private DbAuthService dbAuthService;
 
-    public ChatServer() {
+    public ChatServer() throws SQLException {
+        this.dbAuthService = new DbAuthService();
         this.clients = new HashMap<>();
+
     }
 
-    public void run() {
+    public void run() throws SQLException {
         try (ServerSocket serverSocket = new ServerSocket(8189);
-             AuthService authService = new InMemoryAuthService()) {
+//             AuthService authService = new InMemoryAuthService())
+             AuthService authService = new DbAuthService())
+        {
             while (true) {
                 System.out.println("Wait client connection...");
                 final Socket socket = serverSocket.accept();
-                new ClientHandler(socket, this, authService);
+                new ClientHandler(socket, this, authService, dbAuthService);
                 System.out.println("Client connected");
             }
         } catch (IOException e) {
@@ -47,9 +53,6 @@ public class ChatServer {
         for (ClientHandler value : clients.values()) {
             nicks.append(value.getNick()).append(" ");
         }
-//        final String nicks = clients.values().stream()
-//                .map(ClientHandler::getNick)
-//                .collect(Collectors.joining(" "));
         broadcast(Command.CLIENTS, nicks.toString().trim());
     }
 
