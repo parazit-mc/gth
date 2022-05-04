@@ -14,7 +14,7 @@ public class ClientHandler {
     private final DataInputStream in;
     private final DataOutputStream out;
     private DbAuthService DbAuthService;
-    MessageChatLogging ml = new MessageChatLogging();
+   private MessageChatLogging ml = new MessageChatLogging();
     private String nick;
 
     public ClientHandler(Socket socket, ChatServer server, AuthService authService, DbAuthService dbAuthService) throws IOException {
@@ -31,8 +31,14 @@ public class ClientHandler {
                 try {
                     authenticate();
                     readMessages();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 } finally {
-                    closeConnection();
+                    try {
+                        closeConnection();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }).start();
 
@@ -42,7 +48,7 @@ public class ClientHandler {
 
     }
 
-    private void closeConnection() {
+    private void closeConnection() throws Exception {
         sendMessage(Command.END);
         try {
             if (in != null) {
@@ -68,7 +74,7 @@ public class ClientHandler {
         }
     }
 
-    private void authenticate() {
+    private void authenticate() throws Exception {
         while (true) {
             try {
                 final String str = in.readUTF();
@@ -134,7 +140,7 @@ public class ClientHandler {
                 }
                 server.broadcast(nick + ": " + msg);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -44,13 +44,13 @@ public class ChatServer {
         return clients.containsKey(nick);
     }
 
-    public void subscribe(ClientHandler client) throws FileNotFoundException, UnsupportedEncodingException {
+    public void subscribe(ClientHandler client) throws Exception {
         clients.put(client.getNick(), client);
         broadcastClientList();
         ml.addEvent(client.getNick() + " joined chat");
     }
 
-    public void unsubscribe(ClientHandler client) throws FileNotFoundException, UnsupportedEncodingException {
+    public void unsubscribe(ClientHandler client) throws Exception {
         clients.remove(client.getNick());
         broadcastClientList();
         ml.addEvent(client.getNick() + " left chat");
@@ -74,7 +74,7 @@ public class ChatServer {
         clients.values().forEach(client -> client.sendMessage(msg));
     }
 
-    public void sendMessageToClient(ClientHandler sender, String to, String message) throws FileNotFoundException, UnsupportedEncodingException {
+    public void sendMessageToClient(ClientHandler sender, String to, String message) throws Exception {
         final ClientHandler receiver = clients.get(to);
         if (receiver != null) {
             receiver.sendMessage("от " + sender.getNick() + ": " + message);
