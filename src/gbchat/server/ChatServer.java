@@ -1,10 +1,7 @@
 package gbchat.server;
 import gbchat.Command;
 import gbchat.client.MessageChatLogging;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;

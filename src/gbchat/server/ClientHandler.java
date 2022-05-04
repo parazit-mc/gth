@@ -2,7 +2,6 @@ package gbchat.server;
 
 import gbchat.Command;
 import gbchat.client.MessageChatLogging;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
