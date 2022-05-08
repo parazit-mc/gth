@@ -6,6 +6,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientHandler {
     private final Socket socket;
@@ -17,6 +19,7 @@ public class ClientHandler {
     private String nick;
 
     public ClientHandler(Socket socket, ChatServer server, AuthService authService, DbAuthService dbAuthService) throws IOException {
+        ExecutorService exec = Executors.newFixedThreadPool(1);
         this.DbAuthService = dbAuthService;
         try {
             this.nick = "";
@@ -26,7 +29,7 @@ public class ClientHandler {
             this.out = new DataOutputStream(socket.getOutputStream());
             this.DbAuthService = this.DbAuthService;
 
-            new Thread(() -> {
+            Runnable startTask = () -> {
                 try {
                     authenticate();
                     readMessages();
@@ -39,7 +42,10 @@ public class ClientHandler {
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            };
+
+            exec.execute(startTask);
+            exec.shutdown();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -107,11 +113,11 @@ public class ClientHandler {
         }
     }
 
-    public void sendMessage(Command command, String... params) {
+    void sendMessage(Command command, String... params) {
         sendMessage(command.collectMessage(params));
     }
 
-    public void sendMessage(String message) {
+    void sendMessage(String message) {
         try {
             System.out.println("SERVER: Send message to " + nick);
             out.writeUTF(message);
@@ -145,7 +151,7 @@ public class ClientHandler {
 
     }
 
-    public String getNick() {
+    String getNick() {
         return nick;
     }
 }
