@@ -19,7 +19,8 @@ public class ClientHandler {
     private String nick;
 
     public ClientHandler(Socket socket, ChatServer server, AuthService authService, DbAuthService dbAuthService) throws IOException {
-        ExecutorService exec = Executors.newFixedThreadPool(1);
+//        ExecutorService exec = Executors.newFixedThreadPool(1);
+        ExecutorService exec = Executors.newSingleThreadExecutor();
         this.DbAuthService = dbAuthService;
         try {
             this.nick = "";
