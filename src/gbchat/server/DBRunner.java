@@ -1,7 +1,6 @@
 package gbchat.server;
-
-import gbchat.client.MessageChatLogging;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,13 +8,10 @@ import java.sql.SQLException;
 
 //test database connection
 public class DBRunner {
+    static final Logger LOGGER = LogManager.getLogger(gbchat.server.DBRunner.class);
     public static void main(String[] args) throws SQLException, IOException {
-//        DbAuthService in = new DbAuthService();
-//        in.getNickByLoginAndPassword("login0","pass0");
-        MessageChatLogging ml = new MessageChatLogging();
-        ml.addEvent("chat started");
-        ml.addEvent("test message");
+        LOGGER.info("info");
+        LOGGER.info("info2");
     }
-
 
 }
