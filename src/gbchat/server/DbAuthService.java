@@ -1,6 +1,7 @@
 package gbchat.server;
 
-import gbchat.client.MessageChatLogging;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class DbAuthService implements AuthService {
     private Statement statement;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
-    MessageChatLogging ml = new MessageChatLogging();
+    private final Logger LOGGER = LogManager.getLogger(DbAuthService.class);
     public DbAuthService() throws SQLException, IOException {
         this.connection();
     }
@@ -28,7 +29,7 @@ public class DbAuthService implements AuthService {
 
     void connection() throws SQLException, FileNotFoundException, UnsupportedEncodingException {
         connection = DriverManager.getConnection("jdbc:sqlite:javadb.db");
-        ml.addEvent("database connected");
+        LOGGER.info("database connected");
         statement = connection.createStatement();
     }
 
@@ -37,13 +38,13 @@ public class DbAuthService implements AuthService {
         try (final PreparedStatement preparedStatement = connection.prepareStatement("SELECT nick FROM users WHERE login = ? AND password = ?")) {
             preparedStatement.setString(1, login);
             preparedStatement.setString(2, password);
-
             final ResultSet rs = preparedStatement.executeQuery();
+            LOGGER.info("user found: " + rs.getString("nick"));
+
             return rs.getString("nick");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
 
         return null;
     }
@@ -54,7 +55,7 @@ public class DbAuthService implements AuthService {
             preparedStatement.setString(2, currentNick);
 
             preparedStatement.executeUpdate();
-
+            LOGGER.info("user " + currentNick + " changed nick to " + newNick);
         } catch (SQLException e) {
             e.printStackTrace();
         }

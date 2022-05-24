@@ -1,23 +1,25 @@
 package gbchat.server;
 import gbchat.Command;
-import gbchat.client.MessageChatLogging;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class ChatServer {
 
     private final Map<String, ClientHandler> clients;
     private DbAuthService dbAuthService;
-    MessageChatLogging ml = new MessageChatLogging();
+    private final Logger LOGGER = LogManager.getLogger(ChatServer.class);
 
     public ChatServer() throws SQLException, IOException {
         this.dbAuthService = new DbAuthService();
         this.clients = new HashMap<>();
-
+        LOGGER.info("Server started");
     }
 
     public void run() throws SQLException {
@@ -30,7 +32,7 @@ public class ChatServer {
                 final Socket socket = serverSocket.accept();
                 new ClientHandler(socket, this, authService, dbAuthService);
                 System.out.println("Client connected");
-                ml.addEvent("client connected");
+                LOGGER.info("Client connected");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,13 +46,11 @@ public class ChatServer {
     public void subscribe(ClientHandler client) throws Exception {
         clients.put(client.getNick(), client);
         broadcastClientList();
-        ml.addEvent(client.getNick() + " joined chat");
     }
 
     public void unsubscribe(ClientHandler client) throws Exception {
         clients.remove(client.getNick());
         broadcastClientList();
-        ml.addEvent(client.getNick() + " left chat");
     }
 
     private void broadcastClientList() {
@@ -76,11 +76,11 @@ public class ChatServer {
         if (receiver != null) {
             receiver.sendMessage("от " + sender.getNick() + ": " + message);
             sender.sendMessage("участнику " + to + ": " + message);
-            ml.addEvent(sender.getNick() + " send message to " + to +" "+ message);
+            LOGGER.info(sender.getNick() + " send message to " + to +" "+ message);
 
         } else {
             sender.sendMessage(Command.ERROR, "Участника с ником " + to + " нет в чате!");
-            ml.addEvent("User "+ to + "not presented");
+            LOGGER.info("User "+ to + "not presented");
         }
     }
 }
